@@ -1,27 +1,38 @@
 1class Solution {
 2public:
-3
-4    void dfs(int city,vector<vector<int>>& isConnected,vector<bool>&visited){
-5        visited[city]=true;
-6        for (int neighbor = 0; neighbor < isConnected.size(); neighbor++)
-7        {
-8            if (isConnected[city][neighbor] == 1 && !visited[neighbor])
-9            {
-10                dfs(neighbor, isConnected, visited);
-11            }
-12        }
-13    }
-14    int findCircleNum(vector<vector<int>>& isConnected) {
-15        int n=isConnected.size();
-16        vector<bool> visited(n,false);
-17        int count=0;
-18        for(int city=0;city<n;city++){
-19            if(!visited[city]){
-20                count++;
-21                dfs(city,isConnected,visited);
-22            }
-23        }
-24        return count;
-25        
-26    }
-27};
+3void dfs(vector<vector<int>>&adj,int node,vector<bool>&visited){
+4    visited[node]=true;
+5    for(int neighbors:adj[node]){
+6        if(!visited[neighbors]){
+7            dfs(adj,neighbors,visited);
+8        }
+9    }
+10}
+11
+12   
+13    int findCircleNum(vector<vector<int>>& isConnected) {
+14         int n=isConnected.size();
+15
+16        vector<vector<int>>adj(n);
+17       
+18        for(int i=0;i<n;i++){
+19            for(int j=0;j<n;j++){
+20                if(isConnected[i][j]==1 && i!=j){
+21                    adj[i].push_back(j);
+22
+23                }
+24            }
+25        }
+26        vector<bool>visited(n,false);
+27        int provinces=0;
+28        for(int i=0;i<n;i++){
+29            if(!visited[i]){
+30                provinces++;
+31                dfs(adj,i,visited);
+32            }
+33        }
+34        return provinces;
+35        
+36        
+37    }
+38};
